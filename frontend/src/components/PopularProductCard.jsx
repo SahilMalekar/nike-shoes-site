@@ -7,12 +7,12 @@ const PopularProductCard = ({ imgURL, name, price, id }) => {
   const fixedImgUrl = imgURL.startsWith("../")
     ? imgURL.replace("../", "/")
     : imgURL;
-  console.log(`${BACKEND_URL}${fixedImgUrl}`);
+ 
 
   const navigate = useNavigate();
 
   const handleOnClick = (id) => {
-    navigate(`/product/${id}`);
+    navigate(`/products/${id}`);
   };
   return (
     <div
