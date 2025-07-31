@@ -8,9 +8,11 @@ const Button = ({
   borderColor,
   fullWidth,
   onClick,
+  type
 }) => {
   return (
     <button
+      type={`${type} && 'submit'`}
       onClick={onClick}
       className={`flex justify-center items-center px-7 py-4 rounded-full text-lg font-montserrat leading-none 
       

@@ -2,9 +2,35 @@ import React, { useState } from "react";
 import { loginImg } from "../../assets/images";
 import Button from "../Button";
 import { Link } from "react-router-dom";
+import { signupUser } from "../../api/auth";
 
 const SignUp = () => {
   const [signUp, setSignUp] = useState(true);
+  const [userData, setUserData] = useState({ firstName: "", lastName: "", phoneNumber: "", email: "", password: "" })
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setUserData((prevValue) => ({
+      ...prevValue, [name]: value
+    })
+    )
+  }
+
+
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await signupUser(userData)
+      console.log("Signup success", res.data);
+    } catch (err) {
+      console.log("Signup error", err.response?.data?.msg || "Error");
+    } finally {
+      setUserData({ firstName: "", lastName: "", phoneNumber: "", email: "", password: "" })
+    }
+  }
+
   return (
     <div className="max-container w-full flex items-center justify-center gap-16 border border-gray-100 shadow-xl shadow-black/10 rounded-2xl p-6 py-10 bg-white">
       <div className="max-lg:hidden">
@@ -29,7 +55,7 @@ const SignUp = () => {
             picks. Be first to know and own.
           </p>
         </div>
-        <form className="flex flex-col  gap-4 mt-4 font-montserrat  ">
+        <form className="flex flex-col  gap-4 mt-4 font-montserrat" onSubmit={handleOnSubmit}>
           <div className="flex gap-3 w-full lg:max-w-[90%]">
             <div className="w-full">
               <label
@@ -41,8 +67,11 @@ const SignUp = () => {
               <input
                 id="firstName"
                 type="text"
+                name="firstName"
+                value={userData.firstName}
                 placeholder="Enter your first name"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                onChange={handleChange}
               />
             </div>
             <div className="w-full">
@@ -54,9 +83,12 @@ const SignUp = () => {
               </label>
               <input
                 id="lastName"
+                name="lastName"
                 type="text"
+                value={userData.lastName}
                 placeholder="Enter your last name"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -70,9 +102,12 @@ const SignUp = () => {
               </label>
               <input
                 id="phoneNumber"
+                name="phoneNumber"
                 type="text"
+                value={userData.phoneNumber}
                 placeholder="Enter your phone number"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                onChange={handleChange}
               />
             </div>
             <div className="w-full">
@@ -84,9 +119,12 @@ const SignUp = () => {
               </label>
               <input
                 id="email"
+                name="email"
                 type="text"
+                value={userData.email}
                 placeholder="Enter your email"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                onChange={handleChange}
               />
             </div>
           </div>
@@ -100,9 +138,12 @@ const SignUp = () => {
               </label>
               <input
                 id="password"
+                name="password"
                 type="password"
+                value={userData.password}
                 placeholder="Enter your first name"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                onChange={handleChange}
               />
             </div>
             <div className="w-full">
@@ -114,6 +155,7 @@ const SignUp = () => {
               </label>
               <input
                 id="confirmPassword"
+                name="confirmPassword"
                 type="password"
                 placeholder="Enter your first name"
                 className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
@@ -149,7 +191,7 @@ const SignUp = () => {
               </label>
             </div>
             <div className="mt-8 lg:w-[30%]">
-              <Button label="SignUp" fullWidth />
+              <Button type label="SignUp" fullWidth />
             </div>
 
             <div className="flex gap-1 mt-2 ">
