@@ -1,9 +1,68 @@
-import React from "react";
+import React, { useState } from "react";
 import { Login_Img } from "../../assets/images";
 import Button from "../Button";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { signinUser } from "../../api/auth";
+import { toast } from "sonner";
 
 const Login = () => {
+  const [loginData, setLoginData] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
+  const [error, setError] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleOnChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setLoginData((preValue) => ({
+      ...preValue,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const validate = () => {
+    const newError = {};
+
+    if (!loginData.email) {
+      newError.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(loginData.email)) {
+      newError.email = "Invalid email address";
+    }
+
+    if (!loginData.password) {
+      newError.password = "Password is required";
+    }
+
+    return newError;
+  };
+
+  console.log(loginData);
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    const validationError = validate(); // 1. Validate first
+    setError(validationError); // 2. Set errors in state
+
+    if (Object.keys(validationError).length !== 0) return; // 3. Exit early if any errors
+
+    try {
+      setIsSubmitting(true);
+      const res = await signinUser(loginData);
+      toast.success("Signup successful!");
+      setLoginData({ email: "", password: "", rememberMe: false });
+      setError({});
+      console.log("Signin successfully", res.data);
+    } catch (err) {
+      toast.error(err.response?.data?.msg || "Login failed");
+      console.log("Login error", err.response?.data?.msg || "Error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="max-container flex items-center justify-center gap-10 border border-gray-100 shadow-xl shadow-black/10 rounded-2xl p-6 py-10 bg-white">
       <div className="max-lg:hidden border-sm flex-1 border-slate-100 rounded-xl overflow-hidden max-w-[384px] h-[472px]">
@@ -24,7 +83,10 @@ const Login = () => {
           exclusive member benefits.
         </p>
 
-        <form className="flex flex-col gap-3 font-montserrat mt-4">
+        <form
+          className="flex flex-col gap-3 font-montserrat mt-4"
+          onSubmit={handleOnSubmit}
+        >
           <div className="w-full">
             <label
               htmlFor="email"
@@ -35,9 +97,15 @@ const Login = () => {
             <input
               id="email"
               type="text"
+              name="email"
+              value={loginData.email}
+              onChange={handleOnChange}
               placeholder="Enter your email"
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full max-w-lg"
             />
+            {error.email && (
+              <p className="text-sm text-red-500 mt-1">{error.email}</p>
+            )}
           </div>
           <div className="w-full">
             <label
@@ -48,10 +116,16 @@ const Login = () => {
             </label>
             <input
               id="password"
+              name="password"
+              value={loginData.password}
+              onChange={handleOnChange}
               type="text"
               placeholder="Enter your password"
               className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full max-w-lg"
             />
+            {error.password && (
+              <p className="text-sm text-red-500 mt-1">{error.password}</p>
+            )}
           </div>
 
           <div className="flex items-center gap-2 justify-between mt-2 max-w-lg">
@@ -60,6 +134,8 @@ const Login = () => {
                 type="checkbox"
                 id="rememberMe"
                 name="rememberMe"
+                onChange={handleOnChange}
+                checked={loginData.rememberMe}
                 className="h-4 w-4 text-coral-red focus:ring-coral-red border-gray-300 rounded"
               />
               <label
@@ -74,7 +150,11 @@ const Login = () => {
             </a>
           </div>
           <div className="mt-3 max-w-lg">
-            <Button label="SignIn" fullWidth />
+            <Button
+              label={isSubmitting ? "Signing..." : "Sign in"}
+              fullWidth
+              disabled={isSubmitting}
+            />
           </div>
         </form>
         <div className="flex gap-1 mt-2 ">

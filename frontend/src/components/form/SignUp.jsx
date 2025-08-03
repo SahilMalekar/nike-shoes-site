@@ -1,36 +1,57 @@
 import React, { useState } from "react";
 import { loginImg } from "../../assets/images";
 import Button from "../Button";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "sonner";
+import * as Yup from "yup";
 import { Link } from "react-router-dom";
 import { signupUser } from "../../api/auth";
 
+// ✅ Yup validation schema
+const validationSchema = Yup.object({
+  firstName: Yup.string().required("First name is required"),
+  lastName: Yup.string().required("Last name is required"),
+  phoneNumber: Yup.string()
+    .required("Phone number is required")
+    .matches(/^[0-9]{10}$/, "Phone number must be 10 digits"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters")
+    .required("Password is required"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Please confirm your password"),
+  termsAndConditions: Yup.bool().oneOf(
+    [true],
+    "You must accept the terms and conditions"
+  ),
+});
+
 const SignUp = () => {
-  const [signUp, setSignUp] = useState(true);
-  const [userData, setUserData] = useState({ firstName: "", lastName: "", phoneNumber: "", email: "", password: "" })
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    setUserData((prevValue) => ({
-      ...prevValue, [name]: value
-    })
-    )
-  }
-
-
-
-  const handleOnSubmit = async (e) => {
-    e.preventDefault();
+  const onSubmit = async (data) => {
     try {
-      const res = await signupUser(userData)
+      const { confirmPassword, ...userData } = data; //remove confirmPassword
+      const res = await signupUser(userData);
+      toast.success("Signup successful!");
       console.log("Signup success", res.data);
+      reset();
     } catch (err) {
+      toast.error(err.response?.data?.msg || "Signup failed");
       console.log("Signup error", err.response?.data?.msg || "Error");
-    } finally {
-      setUserData({ firstName: "", lastName: "", phoneNumber: "", email: "", password: "" })
     }
-  }
-
+  };
   return (
     <div className="max-container w-full flex items-center justify-center gap-16 border border-gray-100 shadow-xl shadow-black/10 rounded-2xl p-6 py-10 bg-white">
       <div className="max-lg:hidden">
@@ -55,7 +76,11 @@ const SignUp = () => {
             picks. Be first to know and own.
           </p>
         </div>
-        <form className="flex flex-col  gap-4 mt-4 font-montserrat" onSubmit={handleOnSubmit}>
+        <form
+          className="flex flex-col  gap-4 mt-4 font-montserrat"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+        >
           <div className="flex gap-3 w-full lg:max-w-[90%]">
             <div className="w-full">
               <label
@@ -66,13 +91,16 @@ const SignUp = () => {
               </label>
               <input
                 id="firstName"
-                type="text"
-                name="firstName"
-                value={userData.firstName}
+                {...register("firstName")}
                 placeholder="Enter your first name"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
-                onChange={handleChange}
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.firstName && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.firstName.message}
+                </p>
+              )}
             </div>
             <div className="w-full">
               <label
@@ -83,13 +111,16 @@ const SignUp = () => {
               </label>
               <input
                 id="lastName"
-                name="lastName"
-                type="text"
-                value={userData.lastName}
+                {...register("lastName")}
                 placeholder="Enter your last name"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
-                onChange={handleChange}
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.lastName && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.lastName.message}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex gap-3 w-full lg:max-w-[90%]">
@@ -102,30 +133,36 @@ const SignUp = () => {
               </label>
               <input
                 id="phoneNumber"
-                name="phoneNumber"
-                type="text"
-                value={userData.phoneNumber}
-                placeholder="Enter your phone number"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
-                onChange={handleChange}
+                {...register("phoneNumber")}
+                placeholder="Enter your phoneNumber"
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.phoneNumber && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.phoneNumber.message}
+                </p>
+              )}
             </div>
             <div className="w-full">
               <label
-                htmlFor="lastName"
+                htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
                 Email
               </label>
               <input
                 id="email"
-                name="email"
-                type="text"
-                value={userData.email}
+                {...register("email")}
                 placeholder="Enter your email"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
-                onChange={handleChange}
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
           </div>
           <div className="flex gap-3 w-full lg:max-w-[90%]">
@@ -138,13 +175,16 @@ const SignUp = () => {
               </label>
               <input
                 id="password"
-                name="password"
-                type="password"
-                value={userData.password}
-                placeholder="Enter your first name"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
-                onChange={handleChange}
+                {...register("password")}
+                placeholder="Enter your password"
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.password && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
             <div className="w-full">
               <label
@@ -155,11 +195,16 @@ const SignUp = () => {
               </label>
               <input
                 id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                placeholder="Enter your first name"
-                className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coral-red w-full"
+                {...register("confirmPassword")}
+                placeholder="Enter your confirmPassword"
+                className="formInput"
+                // onChange={handleChange}
               />
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
             </div>
           </div>
           <div>
@@ -167,7 +212,7 @@ const SignUp = () => {
               <input
                 type="checkbox"
                 id="termsAndConditions"
-                name="termsAndConditions"
+                {...register("termsAndConditions")}
                 className="h-4 w-4 text-coral-red focus:ring-coral-red border-gray-300 rounded"
               />
               <label
@@ -190,12 +235,22 @@ const SignUp = () => {
                 </a>{" "}
               </label>
             </div>
+            {errors.termsAndConditions && (
+              <p className="text-sm text-red-500 mt-1">
+                {errors.termsAndConditions.message}
+              </p>
+            )}
             <div className="mt-8 lg:w-[30%]">
-              <Button type label="SignUp" fullWidth />
+              <Button
+                type
+                label={isSubmitting ? "Submitting..." : "SignUp"}
+                fullWidth
+                disabled={isSubmitting}
+              />
             </div>
 
             <div className="flex gap-1 mt-2 ">
-              <p>Alredy have an account?</p>
+              <p>Already have an account?</p>
               <Link
                 to="/login"
                 className="text-blue text-blue-800 font-bold hover:text-blue-600"

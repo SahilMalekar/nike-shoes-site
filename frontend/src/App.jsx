@@ -5,9 +5,11 @@ import { Route, Router, Routes } from "react-router-dom";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import { Toaster } from "sonner";
 
 const App = () => (
   <>
+    <Toaster richColors position="top-right" />
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/signup" element={<SignUpPage />} />

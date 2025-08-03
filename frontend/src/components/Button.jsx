@@ -8,12 +8,14 @@ const Button = ({
   borderColor,
   fullWidth,
   onClick,
-  type
+  type,
+  disabled,
 }) => {
   return (
     <button
       type={`${type} && 'submit'`}
       onClick={onClick}
+      disabled={disabled}
       className={`flex justify-center items-center px-7 py-4 rounded-full text-lg font-montserrat leading-none 
       
       ${bgColor ? `${bgColor} ${textColor} ${borderColor}` : `bg-coral-red border border-coral-red text-white`} ${fullWidth && "w-full"} hover:brightness-95 hover:shadow-md hover:shadow-slate-300 hover:scale-95 transition-transform duration-300
