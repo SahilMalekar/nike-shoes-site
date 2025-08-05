@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "sonner";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { signupUser } from "../../api/auth";
 
 // ✅ Yup validation schema
@@ -40,13 +40,18 @@ const SignUp = () => {
     resolver: yupResolver(validationSchema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     try {
       const { confirmPassword, ...userData } = data; //remove confirmPassword
       const res = await signupUser(userData);
-      toast.success("Signup successful!");
+      toast.success("Signup successful! Redirecting to login...");
       console.log("Signup success", res.data);
       reset();
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (err) {
       toast.error(err.response?.data?.msg || "Signup failed");
       console.log("Signup error", err.response?.data?.msg || "Error");

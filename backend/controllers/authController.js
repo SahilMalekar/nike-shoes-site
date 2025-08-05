@@ -40,7 +40,8 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password , rememberMe } = req.body;
+  
   try {
     // if user exists.
     const user = await User.findOne({ email });
@@ -66,6 +67,7 @@ export const signin = async (req, res) => {
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
         email: user.email,
+        rememberMe
       },
     });
   } catch (err) {

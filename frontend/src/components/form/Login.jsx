@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Login_Img } from "../../assets/images";
 import Button from "../Button";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { signinUser } from "../../api/auth";
 import { toast } from "sonner";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -13,6 +14,9 @@ const Login = () => {
   });
   const [error, setError] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { user, login, logout } = useAuth();
+
+  const navigate = useNavigate();
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -38,23 +42,23 @@ const Login = () => {
     return newError;
   };
 
-  console.log(loginData);
-
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    const validationError = validate(); // 1. Validate first
-    setError(validationError); // 2. Set errors in state
-
-    if (Object.keys(validationError).length !== 0) return; // 3. Exit early if any errors
+    const validationError = validate();
+    setError(validationError);
+    if (Object.keys(validationError).length !== 0) return;
 
     try {
       setIsSubmitting(true);
       const res = await signinUser(loginData);
       toast.success("Signup successful!");
+      login(res.data); // Save user/token to context or localStorage
       setLoginData({ email: "", password: "", rememberMe: false });
       setError({});
-      console.log("Signin successfully", res.data);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
       toast.error(err.response?.data?.msg || "Login failed");
       console.log("Login error", err.response?.data?.msg || "Error");

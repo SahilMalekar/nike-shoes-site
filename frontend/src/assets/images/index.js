@@ -24,6 +24,8 @@ import thumbnailShoe3 from "./thumbnail-shoe3.svg";
 import loginImg from "./LoginImg.jpg";
 import Login_Img from "./Login_Img.jpg";
 
+import logout from "./logout.png"
+
 export {
   bigShoe1,
   bigShoe2,
