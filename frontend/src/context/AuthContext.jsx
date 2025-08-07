@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -14,6 +14,7 @@ export const useAuth = () => useContext(AuthContext);
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
+
   useEffect(() => {
     const storedUser =
       JSON.parse(localStorage.getItem("user")) ||
@@ -43,7 +44,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("user");
     sessionStorage.removeItem("user");
-    navigate("/login");
+    navigate("/login", { replace: true });
   };
 
   return (

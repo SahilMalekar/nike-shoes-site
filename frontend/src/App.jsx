@@ -6,15 +6,16 @@ import ProductDetailsPage from "./pages/ProductDetailsPage";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import { Toaster } from "sonner";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { routes } from "./routesConfig";
 
 const App = () => (
   <>
     <Toaster richColors position="top-right" />
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/products/:id" element={<ProductDetailsPage />} />
+      {routes.map(({ path, element }) => (
+        <Route key={path} path={path} element={element} />
+      ))}
     </Routes>
   </>
 );
