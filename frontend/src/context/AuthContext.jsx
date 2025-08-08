@@ -13,6 +13,8 @@ export const useAuth = () => useContext(AuthContext);
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,8 +23,12 @@ const AuthProvider = ({ children }) => {
       JSON.parse(sessionStorage.getItem("user"));
 
     if (storedUser) {
+      console.log(storedUser, "after logging...");
+
       setUser(storedUser);
     }
+
+    setLoading(false);
   }, []);
 
   const login = (userData) => {
@@ -41,6 +47,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
+    setIsLoggingOut(true);
     setUser(null);
     localStorage.removeItem("user");
     sessionStorage.removeItem("user");
@@ -48,7 +55,9 @@ const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, login, logout, loading, isLoggingOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
