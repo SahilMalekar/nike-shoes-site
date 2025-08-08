@@ -1,23 +1,48 @@
+import { useState } from "react";
 import Button from "../components/Button";
+import { subscribe } from "../api/subscribe";
+import { toast } from "sonner";
 const Subscribe = () => {
+  const [email, setEmail] = useState({ email: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState({});
+
+  const validate = () => {
+    const newError = {};
+
+    if (!email.email) {
+      newError.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email.email)) {
+      newError.email = "Invalid email address";
+    }
+
+    return newError;
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const validationError = validate();
+    setError(validationError);
+
+    if (Object.keys(validationError).length !== 0) return;
+
+    try {
+      const res = await subscribe(email);
+      toast.success("Subscribe Successfully!");
+      console.log(res.data);
+    } catch (err) {
+      toast.error(err?.response?.data?.msg || "subscribe failed");
+      console.log("Subscribe error", err.response?.data?.msg || "Error");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  console.log(email);
+
   return (
-    // <section
-    //   id="contact-us"
-    //   className="max-container flex justify-between items-center max-lg:flex-col gap-12 "
-    // >
-    //   <h3 className="text-4xl font-palanquin leading-[68px] font-bold lg:max-w-md ">
-    //     Sign Up for
-    //     <span className="text-coral-red"> Updates </span>& Newsletter
-    //   </h3>
-
-    //   <div className="lg:w-[40%] w-full flex max-sm:flex-col gap-5 sm:border sm:border-slate-gray rounded-full p-2.5">
-    //     <input type="text" placeholder="subscribe@nike.com" className="input" />
-    //     <div className="flex max-sm:justify-end items-center max-sm:w-full">
-    //       <Button label="Sign Up" fullWidth />
-    //     </div>
-    //   </div>
-    // </section>
-
     <section
       id="contact-us"
       className="max-container flex justify-between items-center max-lg:flex-col gap-10"
@@ -26,10 +51,29 @@ const Subscribe = () => {
         Sign Up For <span className="text-coral-red "> Updates </span> &
         Newsletter
       </h3>
-      <form className="w-full lg:w-[40%] flex max-sm:flex-col items-center gap-5 sm:border border-slate-gray rounded-full p-2.5">
-        <input type="text" placeholder="subscribe@nike.com" className="input" />
+      <form
+        className="w-full lg:w-[40%] flex max-sm:flex-col items-center gap-5 sm:border border-slate-gray rounded-full p-2.5"
+        onSubmit={handleOnSubmit}
+      >
+        <input
+          type="email"
+          name="email"
+          placeholder="subscribe@nike.com"
+          className="input"
+          value={email.email}
+          onChange={(e) => setEmail({ email: e.target.value })}
+        />
+        <div className="sm:hidden">
+          {error.email && (
+            <p className="text-sm text-red-500 mt-1">{error.email}</p>
+          )}
+        </div>
         <div className="max-sm:w-full">
-          <Button label="Sign up" fullWidth />
+          <Button
+            label={isSubmitting ? "Subscribing..." : "Subscribe"}
+            fullWidth
+            type
+          />
         </div>
       </form>
     </section>
