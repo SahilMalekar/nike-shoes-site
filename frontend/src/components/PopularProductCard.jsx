@@ -13,6 +13,9 @@ const PopularProductCard = ({ imgURL, name, price, id }) => {
   const handleOnClick = (id) => {
     navigate(`/products/${id}`);
   };
+
+  console.log(`${API_BASE_URL}${fixedImgUrl}`, "from productCard");
+
   return (
     <div
       onClick={() => handleOnClick(id)}

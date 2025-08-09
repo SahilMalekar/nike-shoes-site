@@ -6,6 +6,7 @@ import Nav from "../components/Nav";
 import Button from "../components/Button";
 import axios from "axios";
 import { getProductById } from "../api/api";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -13,6 +14,10 @@ const ProductDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const fixedImgUrl = product?.imgURL.startsWith("../")
+    ? product?.imgURL.replace("../", "/")
+    : product?.imgURL;
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -65,7 +70,7 @@ const ProductDetails = () => {
       <section className="padding max-container flex max-lg:flex-col items-start  lg:justify-center gap-10 w-full min-h-screen">
         <div className="flex-1 flex justify-center w-full">
           <img
-            src={product.imgURL}
+            src={`${API_BASE_URL}${fixedImgUrl}`}
             alt={product.name}
             width={474}
             height={474}
@@ -84,7 +89,7 @@ const ProductDetails = () => {
           </p>
           <u className="text-md list-outside no-underline font-montserrat text-slate-gray mb-5">
             {product.features.map((feature) => (
-              <li>{feature}</li>
+              <li key={feature}>{feature}</li>
             ))}
           </u>
           <div className="flex justify-start items-center gap-3 font-montserrat text-lg font-bold">

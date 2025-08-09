@@ -11,7 +11,7 @@ import {
 
 import Nav from "../components/Nav";
 import Hero2 from "../sections/Hero2";
-import PopularProducts2 from "../components/PopularProducts2";
+// import PopularProducts2 from "../components/PopularProducts2";
 
 const Home = () => {
   return (
