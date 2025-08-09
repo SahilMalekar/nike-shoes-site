@@ -7,7 +7,7 @@ const PopularProducts2 = () => {
     <section className="max-container flex flex-col gap-16">
       <div>
         <h2 className="text-4xl font-palanquin font-bold leading-normal">
-          Our <spna className="text-coral-red"> Popular </spna> Products
+          Our <span className="text-coral-red"> Popular </span> Products
         </h2>
         <p className="text-base text-slate-gray font-montserrat leading-normal mt-6 lg:max-w-lg">
           Experience top-notch quality and style with our sought-after

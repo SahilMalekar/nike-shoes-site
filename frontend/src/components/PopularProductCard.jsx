@@ -1,13 +1,12 @@
 import React from "react";
 import { star } from "../assets/icons";
 import { useNavigate } from "react-router-dom";
-const BACKEND_URL = "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const PopularProductCard = ({ imgURL, name, price, id }) => {
   const fixedImgUrl = imgURL.startsWith("../")
     ? imgURL.replace("../", "/")
     : imgURL;
- 
 
   const navigate = useNavigate();
 
@@ -20,7 +19,7 @@ const PopularProductCard = ({ imgURL, name, price, id }) => {
       className="flex flex-1 flex-col w-full max-sm:w-full max-sm:items-center"
     >
       <img
-        src={`${BACKEND_URL}${fixedImgUrl}`}
+        src={`${API_BASE_URL}${fixedImgUrl}`}
         alt={name}
         className="w-[280px] h-[280px] hover:brightness-90 cursor-pointer transition-transform duration-300 hover:scale-105  overflow-hidden"
       />

@@ -20,7 +20,7 @@ const ProductDetails = () => {
         setLoading(true);
         const res = await getProductById(id);
         if (res) {
-          setProduct(res);
+          setProduct(res.data);
         } else {
           setError("Product Not Found!");
         }

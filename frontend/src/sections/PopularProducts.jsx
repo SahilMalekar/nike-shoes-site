@@ -3,6 +3,7 @@ import PopularProductCard from "../components/PopularProductCard";
 import { products } from "../constants";
 import { useEffect } from "react";
 import axios from "axios";
+import { getProducts } from "../api/api";
 
 const PopularProducts = () => {
   const [productsData, setProductsData] = useState(null);
@@ -12,7 +13,7 @@ const PopularProducts = () => {
     (async () => {
       setIsLoading(true);
       try {
-        const res = await axios.get("/api/products");
+        const res = await getProducts();
         console.log(res.data);
 
         setProductsData(res.data);
