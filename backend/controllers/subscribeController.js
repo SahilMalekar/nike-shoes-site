@@ -22,7 +22,9 @@ export const subscribeUser = async (req, res) => {
       html: `<h3>🎉 Welcome!</h3><p>You've successfully subscribed to <strong>Nike</strong> updates & newsletter.</p>`,
     });
 
-    res.status(201).json({ msg: "Subscription successful", user: newSub });
+    return res
+      .status(200)
+      .json({ msg: "Subscription successful", user: newSub });
   } catch (err) {
     console.log("Subscription Error ", err);
     res.status(500).json({ msg: "Server error" });

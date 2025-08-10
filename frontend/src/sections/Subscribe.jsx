@@ -21,12 +21,13 @@ const Subscribe = () => {
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
     const validationError = validate();
     setError(validationError);
 
     if (Object.keys(validationError).length !== 0) return;
+
+    setIsSubmitting(true);
 
     try {
       const res = await subscribe(email);
@@ -71,6 +72,7 @@ const Subscribe = () => {
         <div className="max-sm:w-full">
           <Button
             label={isSubmitting ? "Subscribing..." : "Subscribe"}
+            disabled={isSubmitting}
             fullWidth
             type
           />
