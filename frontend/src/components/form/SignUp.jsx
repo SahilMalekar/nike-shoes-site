@@ -49,9 +49,8 @@ const SignUp = () => {
       toast.success("Signup successful! Redirecting to login...");
       console.log("Signup success", res.data);
       reset();
-      setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+
+      navigate("/login");
     } catch (err) {
       toast.error(err.response?.data?.msg || "Signup failed");
       console.log("Signup error", err.response?.data?.msg || "Error");

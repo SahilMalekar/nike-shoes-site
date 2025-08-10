@@ -56,9 +56,7 @@ const Login = () => {
       setLoginData({ email: "", password: "", rememberMe: false });
       setError({});
 
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      navigate("/");
     } catch (err) {
       toast.error(err.response?.data?.msg || "Login failed");
       console.log("Login error", err.response?.data?.msg || "Error");
