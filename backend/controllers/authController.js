@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 
 export const signup = async (req, res) => {
   try {
-    const { firstName, lastName, phoneNumber, email, password } = req.body;
+    const { firstName, lastName, phoneNumber, email, password, role } =
+      req.body;
 
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ msg: "User already exists" });
@@ -17,11 +18,16 @@ export const signup = async (req, res) => {
       email,
       phoneNumber,
       password: hashedPassword,
+      role,
     });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     res.status(201).json({
       token,
@@ -31,6 +37,7 @@ export const signup = async (req, res) => {
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (err) {
@@ -40,8 +47,8 @@ export const signup = async (req, res) => {
 };
 
 export const signin = async (req, res) => {
-  const { email, password , rememberMe } = req.body;
-  
+  const { email, password, rememberMe } = req.body;
+
   try {
     // if user exists.
     const user = await User.findOne({ email });
@@ -54,9 +61,13 @@ export const signin = async (req, res) => {
       return res.status(400).json({ msg: "Invalid email or password" });
 
     //Generate token
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
 
     // Return response
     res.status(200).json({
@@ -67,7 +78,8 @@ export const signin = async (req, res) => {
         lastName: user.lastName,
         phoneNumber: user.phoneNumber,
         email: user.email,
-        rememberMe
+        role: user.role,
+        rememberMe,
       },
     });
   } catch (err) {

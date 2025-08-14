@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 import authRouter from "./routes/auth.js";
 import productRouter from "./routes/products.js";
 import subscribeRoutes from "./routes/subscribeRoutes.js";
+import adminRouter from "./routes/admin.js";
 
 const app = express();
 
@@ -36,6 +37,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 
 app.use("/api/subscribe", subscribeRoutes);
+
+app.use("/api", adminRouter);
 
 if (process.env.NODE_ENV !== "test") {
   mongoose
