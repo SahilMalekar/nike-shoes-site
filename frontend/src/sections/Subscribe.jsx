@@ -41,8 +41,6 @@ const Subscribe = () => {
     }
   };
 
-  console.log(email);
-
   return (
     <section
       id="contact-us"
