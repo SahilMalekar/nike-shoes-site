@@ -5,7 +5,7 @@ import app from "../server.js"; // your Express app
 import "../tests/setup.js"; // ensures in-memory DB starts before tests
 
 describe("Auth API", () => {
-  it("should return 201 after signing a user", async () => {
+  it("should return 201 after signup a user", async () => {
     const res = await request(app).post("/api/auth/signup").send({
       firstName: "Sahil",
       lastName: "Malekar",

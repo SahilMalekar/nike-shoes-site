@@ -38,7 +38,7 @@ app.use("/api/products", productRouter);
 
 app.use("/api/subscribe", subscribeRoutes);
 
-app.use("/api", adminRouter);
+app.use("/api/admin", adminRouter);
 
 if (process.env.NODE_ENV !== "test") {
   mongoose

@@ -1,8 +1,6 @@
 import request from "supertest";
 import app from "../server.js"; // your Express app
 import "../tests/setup.js"; // ensures in-memory DB starts before tests
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
 import Product from "../models/Product.js";
 
 let adminToken;
@@ -40,7 +38,7 @@ describe("Shoe API test", () => {
     };
 
     let res = await request(app)
-      .post("/api/shoes")
+      .post("/api/admin/shoes")
       .set("Authorization", `Bearer ${adminToken}`)
       .send(shoeData);
 
@@ -60,7 +58,7 @@ describe("Shoe API test", () => {
     });
 
     const res = await request(app)
-      .patch(`/api/shoes/${shoe._id}`)
+      .patch(`/api/admin/shoes/${shoe._id}`)
       .set("Authorization", `Bearer ${adminToken}`)
       .send({ price: 800, description: "Sahil Malekar's shoe" });
 
@@ -81,7 +79,7 @@ describe("Shoe API test", () => {
     });
 
     const res = await request(app)
-      .delete(`/api/shoes/${shoe._id}`)
+      .delete(`/api/admin/shoes/${shoe._id}`)
       .set("Authorization", `Bearer ${adminToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.msg).toBe("Shoe deleted successfully");
