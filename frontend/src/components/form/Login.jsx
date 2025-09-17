@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Login_Img } from "../../assets/images";
 import Button from "../Button";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import { signinUser } from "../../api/auth";
 import { toast } from "sonner";
 import { useAuth } from "../../context/AuthContext";
@@ -17,6 +17,12 @@ const Login = () => {
   const { user, login, logout } = useAuth();
 
   const navigate = useNavigate();
+
+
+    if (user?.token) {
+    // already logged in → redirect to home
+    return <Navigate to="/" replace />;
+  }
 
   const handleOnChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -64,6 +70,8 @@ const Login = () => {
       setIsSubmitting(false);
     }
   };
+
+
 
   return (
     <div className="max-container flex items-center justify-center gap-10 border border-gray-100 shadow-xl shadow-black/10 rounded-2xl p-6 py-10 bg-white">

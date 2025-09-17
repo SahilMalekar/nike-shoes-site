@@ -6,8 +6,11 @@ import {
   deleteShoe,
   updateShoe,
 } from "../controllers/adminController.js";
+import { getShoes } from "../controllers/productController.js";
 
 const router = express.Router();
+
+router.get("/shoes", authenticateUser, adminAuth, getShoes);
 
 router.post("/shoes", authenticateUser, adminAuth, addShoe);
 

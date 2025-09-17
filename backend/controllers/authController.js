@@ -7,6 +7,8 @@ export const signup = async (req, res) => {
     const { firstName, lastName, phoneNumber, email, password, role } =
       req.body;
 
+      console.log("from signup server " , req.body.role);
+      
     const userExists = await User.findOne({ email });
     if (userExists) return res.status(400).json({ msg: "User already exists" });
 
@@ -20,6 +22,9 @@ export const signup = async (req, res) => {
       password: hashedPassword,
       role,
     });
+
+    console.log("from signup server " , user);
+    
 
     const token = jwt.sign(
       { id: user._id, role: user.role },

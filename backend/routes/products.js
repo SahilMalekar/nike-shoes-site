@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/shoes", authenticateUser, getShoes);
 
-router.get("/", authenticateUser, getPopularProducts);
+router.get("/",  authenticateUser, getPopularProducts);
 
 router.get("/:id", authenticateUser, getProductById);
 
