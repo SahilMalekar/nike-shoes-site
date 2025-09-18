@@ -1,8 +1,9 @@
 import axios from "axios";
+import { API } from "./api";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-const API = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
-});
+// const API = axios.create({
+//   baseURL: `${API_BASE_URL}/api`,
+// });
 
 export const subscribe = (email) => API.post("/subscribe", email);

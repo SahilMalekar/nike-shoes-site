@@ -5,6 +5,7 @@ import logoutImg from "../assets/images/logout.png";
 
 import { navLinks } from "../constants";
 import { useAuth } from "../context/AuthContext";
+import UserProfile from "./UserProfile";
 
 const Nav = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -38,58 +39,7 @@ const Nav = () => {
           ))}
         </ul>
         {/* {logged user name} */}
-        {user?.token && (
-          <div className="max-lg:hidden flex items-center">
-            {/* <div className="bg-white-400 hover:bg-gray-200 cursor-pointer h-10 w-10 rounded-full flex items-center justify-center"> */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="size-6 text-coral-red"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
-                clip-rule="evenodd"
-              />
-            </svg>
-            {/* </div> */}
-            <p className="text-xl font-bold font-montserrat leading-normal text-slate-gray pl-1 pr-3">
-              {user?.user?.firstName}
-            </p>
-
-            {/* <Button label="logout" /> */}
-            <div
-              className="bg-white-400 cursor-pointer h-8 w-8 rounded-full flex items-center justify-center hover:scale-90 transition-transform duration-300"
-              onClick={() => logout()}
-            >
-              <img src={logoutImg} />
-            </div>
-          </div>
-        )}
-
-        <div
-          className=" max-lg:block hidden cursor-pointer "
-          onClick={() => setIsMenuOpen((prev) => !prev)}
-        >
-          <img src={hamburger} alt="Hamburger" height={25} width={25} />
-        </div>
-        {/* {Mobile Navigation} */}
-        {isMenuOpen && (
-          <ul className="lg:hidden flex flex-col gap-6 mt-4 shadow-md bg-white p-6 rounded-md absolute z-50 right-4 top-[80px]">
-            {navLinks.map((item) => (
-              <li key={item.label}>
-                <a
-                  className="text-base text-slate-gray font-montserrat"
-                  href={item.href}
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        )}
+        {user?.token && <UserProfile />}
       </nav>
     </header>
   );

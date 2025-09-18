@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { replace, useNavigate } from "react-router-dom";
 import { API } from "../api/api";
+
 const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
@@ -18,7 +19,6 @@ const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🔹 Load user from storage on mount
     const storedUser =
       JSON.parse(localStorage.getItem("user")) ||
       JSON.parse(sessionStorage.getItem("user"));
@@ -28,6 +28,7 @@ const AuthProvider = ({ children }) => {
 
       setUser(storedUser);
     }
+
     setLoading(false);
   }, []);
 
@@ -38,6 +39,7 @@ const AuthProvider = ({ children }) => {
       if (user?.token && !config.url.startsWith("/auth")) {
         config.headers.Authorization = `Bearer ${user.token}`;
       }
+      console.log("➡️ API Request:", config.url, "Headers:", config.headers);
       return config;
     });
 
