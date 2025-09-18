@@ -31,6 +31,23 @@ const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    // 🔹 Sync axios header whenever user changes
+    // ✅ Attach token only for non-auth routes
+    const interceptor = API.interceptors.request.use((config) => {
+      if (user?.token && !config.url.startsWith("/auth")) {
+        config.headers.Authorization = `Bearer ${user.token}`;
+      }
+      console.log("➡️ API Request:", config.url, "Headers:", config.headers);
+      return config;
+    });
+
+    // Cleanup when user changes or component unmounts
+    return () => {
+      API.interceptors.request.eject(interceptor);
+    };
+  }, [user]);
+
   const login = (userData) => {
     const { token, user } = userData;
     const { rememberMe, ...userInfo } = user;

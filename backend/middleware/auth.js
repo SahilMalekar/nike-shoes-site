@@ -5,6 +5,7 @@ export const authenticateUser = async (req, res, next) => {
   try {
     const token = req.header("Authorization")?.replace("Bearer ", "");
     if (!token) {
+         console.log("❌ No token provided");
       return res
         .status(401)
         .json({ message: "No token, authorization denied" });

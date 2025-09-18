@@ -4,12 +4,16 @@ import { products } from "../constants";
 import { useEffect } from "react";
 import axios from "axios";
 import { getProducts } from "../api/api";
+import { useAuth } from "../context/AuthContext";
 
 const PopularProducts = () => {
   const [productsData, setProductsData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { user } = useAuth();
+  const token = user?.token;
 
   useEffect(() => {
+    if (!token) return;
     (async () => {
       setIsLoading(true);
       try {
@@ -23,7 +27,7 @@ const PopularProducts = () => {
         setIsLoading(false);
       }
     })();
-  }, []);
+  }, [token]);
 
   if (!productsData)
     return (

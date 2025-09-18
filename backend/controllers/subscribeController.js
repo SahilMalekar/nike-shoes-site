@@ -3,6 +3,8 @@ import { sendMail } from "../utils/sendMail.js";
 
 export const subscribeUser = async (req, res) => {
   const { email } = req.body;
+  console.log("from api backend" , email);
+  
 
   if (!email) return res.status(400).json({ msg: "Email is required" });
 
