@@ -281,7 +281,7 @@ const UserProfile = () => {
               Collections
             </a>
           </li>
-          <li onClick={() => navigate("/admin", { replace: true })}>
+          <li onClick={() => navigate("/admin")}>
             <a
               href="#"
               className="flex gap-2 items-center py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"

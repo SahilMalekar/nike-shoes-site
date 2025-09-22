@@ -4,11 +4,11 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProductDetailsPage from "./pages/ProductDetailsPage";
 import ProtectedRoute from "./components/routes/ProtectedRoute";
-import Dashboard from "./pages/admin/Dashboard";
+import Dashboard from "./admin/pages/Dashboard";
 import AdminRoute from "./components/routes/AdminRoute";
-import ShoePage from "./pages/admin/ShoePage";
-import UserPage from "./pages/admin/UserPage";
-import AdminLayout from "./pages/admin/AdminLayout";
+import ShoePage from "./admin/pages/ShoePage";
+import UserPage from "./admin/pages/UserPage";
+import AdminLayout from "./admin/layouts/AdminLayout";
 
 export const routes = [
   {
@@ -36,8 +36,8 @@ export const routes = [
     ),
     children: [
       { index: true, element: <Dashboard /> }, // default /admin
-      { path: "shoes", element: <ShoePage /> },   // /admin/shoes
-      { path: "users", element: <UserPage /> },   // /admin/users
+      { path: "shoes", element: <ShoePage /> }, // /admin/shoes
+      { path: "users", element: <UserPage /> }, // /admin/users
     ],
   },
   { path: "/login", element: <LoginPage /> },
