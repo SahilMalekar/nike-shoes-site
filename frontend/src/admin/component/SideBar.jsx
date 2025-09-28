@@ -31,8 +31,6 @@ const SideBar = ({ openSideBar, setOpenSideBar }) => {
   };
   return (
     <>
-      {/* <NavBar /> */}
-
       <aside
         className={`fixed top-0 left-0 z-40 w-64 h-screen pt-14 
     transition-transform duration-300 ease-in-out

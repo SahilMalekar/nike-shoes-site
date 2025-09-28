@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { headerLogo } from "../../assets/images";
+import { Link } from "react-router-dom";
 
 const NavBar = ({ setOpenSideBar }) => {
   const { user, logout } = useAuth();
@@ -10,7 +11,7 @@ const NavBar = ({ setOpenSideBar }) => {
   const menuRef = useRef(null);
 
   const handleToggle = (type) => {
-    console.log("clicked", openMenu);
+    // console.log("clicked", openMenu.userMenu);
 
     setOpenMenu((prev) => ({ ...prev, [type]: !prev[type] }));
   };
@@ -66,22 +67,18 @@ const NavBar = ({ setOpenSideBar }) => {
               </svg>
               <span className="sr-only">Toggle sidebar</span>
             </button>
-            <a
-              href="https://flowbite.com"
-              className="flex items-center justify-between mr-4"
-            >
-              <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
-                <a href="/">
-                  <img
-                    src={headerLogo}
-                    alt="Logo"
-                    height={29}
-                    width={129}
-                    className="m-0 w-[129px] h-[29px]"
-                  />
-                </a>
-              </span>
-            </a>
+
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white mr-9">
+              <Link to="/">
+                <img
+                  src={headerLogo}
+                  alt="Logo"
+                  height={29}
+                  width={129}
+                  className="m-0 w-[129px] h-[29px]"
+                />
+              </Link>
+            </span>
             <form className="hidden md:block md:pl-2">
               <label htmlFor="topbar-search" className="sr-only">
                 Search
@@ -170,66 +167,67 @@ const NavBar = ({ setOpenSideBar }) => {
               </svg>
             </button>
             {/* <---User Menu---> */}
-            <button
-              type="button"
-              className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-              onClick={() => handleToggle("userMenu")}
-            >
-              <span className="sr-only">Open user menu</span>
-              <img
-                className="w-8 h-8 rounded-full"
-                src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
-                alt="user photo"
-              />
-            </button>
-            {/* <!-- Dropdown menu --> */}
-            <div
-              ref={menuRef}
-              className={`${openMenu.userMenu ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"} absolute top-10 right-8 z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl transform transition-all duration-200 ease-out `}
-              id="dropdown"
-            >
-              <div className="py-3 px-4">
-                <span className="block text-sm font-semibold text-gray-900 dark:text-white">
-                  {user?.user?.name}
-                </span>
-                <span className="block text-sm text-gray-900 truncate dark:text-white">
-                  {user?.user?.email}
-                </span>
+            <div ref={menuRef}>
+              <button
+                type="button"
+                className="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                onClick={() => handleToggle("userMenu")}
+              >
+                <span className="sr-only">Open user menu</span>
+                <img
+                  className="w-8 h-8 rounded-full"
+                  src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
+                  alt="user photo"
+                />
+              </button>
+              {/* <!-- Dropdown menu --> */}
+              <div
+                className={`${openMenu.userMenu ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"} absolute top-10 right-8 z-50 my-4 w-56 text-base list-none bg-white  divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600 rounded-xl transform transition-all duration-200 ease-out `}
+                id="dropdown"
+              >
+                <div className="py-3 px-4">
+                  <span className="block text-sm font-semibold text-gray-900 dark:text-white">
+                    {user?.user?.name}
+                  </span>
+                  <span className="block text-sm text-gray-900 truncate dark:text-white">
+                    {user?.user?.email}
+                  </span>
+                </div>
+                <ul
+                  className="py-1 text-gray-700 dark:text-gray-300"
+                  aria-labelledby="dropdown"
+                >
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                    >
+                      My profile
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
+                    >
+                      Account settings
+                    </a>
+                  </li>
+                </ul>
+                <ul
+                  className="py-1 text-gray-700 dark:text-gray-300"
+                  aria-labelledby="dropdown"
+                >
+                  <li onClick={() => logout()}>
+                    <a
+                      href="#"
+                      className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      Sign out
+                    </a>
+                  </li>
+                </ul>
               </div>
-              <ul
-                className="py-1 text-gray-700 dark:text-gray-300"
-                aria-labelledby="dropdown"
-              >
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                  >
-                    My profile
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white"
-                  >
-                    Account settings
-                  </a>
-                </li>
-              </ul>
-              <ul
-                className="py-1 text-gray-700 dark:text-gray-300"
-                aria-labelledby="dropdown"
-              >
-                <li onClick={() => logout()}>
-                  <a
-                    href="#"
-                    className="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >
-                    Sign out
-                  </a>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
