@@ -1,6 +1,6 @@
 import React from "react";
 
-const ProductTableRow = ({ product }) => {
+const ProductTableRow = ({ product, onEditClick }) => {
   const { brand, name, stock, images, description, size, _id, price } = product;
 
   return (
@@ -120,6 +120,7 @@ const ProductTableRow = ({ product }) => {
       <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
         <div className="flex items-center space-x-4">
           <button
+            onClick={() => onEditClick(product)}
             type="button"
             data-drawer-target="drawer-update-product"
             data-drawer-show="drawer-update-product"

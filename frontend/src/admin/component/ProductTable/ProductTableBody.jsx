@@ -2,30 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductTableRow from "./ProductTableRow";
 import { getProducts } from "../../api/productApi";
 
-const ProductTableBody = () => {
-  const [products, setProducts] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const fetchProducts = async (data) => {
-    setIsLoading(true);
-    try {
-      const res = await getProducts(data); // use consistent naming
-      setProducts(res.data);
-      console.log(res.data);
-    } catch (err) {
-      console.error(
-        "Add product error:",
-        err.response?.data?.msg || err.message
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
+const ProductTableBody = ({ onEditClick, products, isLoading }) => {
   if (isLoading) {
     return (
       <tbody>
@@ -53,7 +30,11 @@ const ProductTableBody = () => {
   return (
     <tbody>
       {products.map((product) => (
-        <ProductTableRow key={product._id} product={product} />
+        <ProductTableRow
+          key={product._id}
+          product={product}
+          onEditClick={onEditClick}
+        />
       ))}
     </tbody>
   );

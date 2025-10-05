@@ -11,8 +11,6 @@ const NavBar = ({ setOpenSideBar }) => {
   const menuRef = useRef(null);
 
   const handleToggle = (type) => {
-    // console.log("clicked", openMenu.userMenu);
-
     setOpenMenu((prev) => ({ ...prev, [type]: !prev[type] }));
   };
 
@@ -83,7 +81,7 @@ const NavBar = ({ setOpenSideBar }) => {
               <label htmlFor="topbar-search" className="sr-only">
                 Search
               </label>
-              <div className="relative md:w-64 md:w-96">
+              <div className="relative md:w-96">
                 <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   <svg
                     className="w-5 h-5 text-gray-500 dark:text-gray-400"

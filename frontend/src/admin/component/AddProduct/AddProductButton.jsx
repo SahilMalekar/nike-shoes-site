@@ -23,6 +23,7 @@ const AddProductButton = () => {
       setIsSubmitting(false);
     }
   };
+
   return (
     <div>
       <button
